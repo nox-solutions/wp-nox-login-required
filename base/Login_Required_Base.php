@@ -45,8 +45,9 @@
          * @param string $plugin_slug
          * @param string $plugin_prefix
          * @param string $plugin_options_page_slug
+         * @param bool   $load_text_domain
          */
-        public function __construct($plugin_name, $plugin_version, $plugin_slug, $plugin_prefix, $plugin_options_page_slug)
+        public function __construct($plugin_name, $plugin_version, $plugin_slug, $plugin_prefix, $plugin_options_page_slug, $load_text_domain = false)
         {
             $this->plugin_name              = $plugin_name;
             $this->plugin_version           = $plugin_version;
@@ -54,6 +55,10 @@
             $this->plugin_domain            = $this->plugin_slug;
             $this->plugin_prefix            = $plugin_prefix;
             $this->plugin_options_page_slug = $plugin_options_page_slug;
+
+            if ($load_text_domain) {
+                $this->load_text_domain();
+            }
         }
 
         /**
@@ -71,7 +76,11 @@
             add_action(
                 'plugins_loaded',
                 function () {
-                    load_plugin_textdomain('wp-nox-login-required', false, dirname(__DIR__).'/languages/');
+                    load_plugin_textdomain(
+                        $this->plugin_slug,
+                        false,
+                        "/{$this->plugin_slug}/languages/"
+                    );
                 }
             );
         }

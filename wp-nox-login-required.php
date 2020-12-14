@@ -34,10 +34,9 @@
         $plugin_slug        = 'wp-nox-login-required';
         $settings_page_slug = "{$plugin_slug}-settings";
 
-        $admin = new Login_Required_Admin($plugin_name, $plugin_version, $plugin_slug, $plugin_prefix, $settings_page_slug);
+        $admin = new Login_Required_Admin($plugin_name, $plugin_version, $plugin_slug, $plugin_prefix, $settings_page_slug, true);
 
         $admin->run();
-        $admin->load_text_domain();
 
         $plugin = new Login_Required_Plugin($plugin_name, $plugin_version, $plugin_slug, $plugin_prefix, $settings_page_slug);
 

@@ -14,7 +14,7 @@
          */
         public function run()
         {
-            $enabled = (bool)get_option($this->prefix('setting_enabled'));
+            $enabled = (bool)get_option($this->prefix('enabled'));
 
             if ($enabled) {
                 $this->apply_general_actions();
@@ -22,21 +22,23 @@
             }
         }
 
+        /**
+         *
+         */
         protected function apply_general_actions()
         {
             add_action(
                 'template_redirect',
                 function () {
                     if (!is_user_logged_in()) {
-                        $canRedirect = (bool)get_option($this->prefix('setting_can_redirect'));
+                        $usesHtml    = (bool)get_option($this->prefix('custom_html'));
+                        $canRedirect = !$usesHtml;
 
-                        if (!$canRedirect) {
-                            $htmlFilePath = get_option($this->prefix('setting_file_patth'));
+                        if ($usesHtml) {
+                            $htmlContents = get_option($this->prefix('custom_html_contents'));
 
-                            if (is_file($htmlFilePath)) {
-                                $html = file_get_contents($htmlFilePath);
-
-                                echo $html;
+                            if (!empty($htmlContents)) {
+                                echo $htmlContents;
 
                                 http_response_code(200);
 
@@ -63,7 +65,7 @@
 
         protected function apply_rest_actions()
         {
-            $enable_rest = (bool)get_option($this->prefix('setting_rest_enabled'));
+            $enable_rest = (bool)get_option($this->prefix('rest_enabled'));
 
             if (!$enable_rest) {
                 add_filter(
@@ -74,7 +76,11 @@
                         }
 
                         if (!is_user_logged_in()) {
-                            return new \WP_Error('rest_not_logged_in', 'API Requests are only supported for authenticated requests.', ['status' => 401]);
+                            return new \WP_Error(
+                                'rest_not_logged_in',
+                                __('API Requests are only supported for authenticated requests.', 'wp-nox-login-required'),
+                                ['status' => 401]
+                            );
                         }
 
                         return $result;
