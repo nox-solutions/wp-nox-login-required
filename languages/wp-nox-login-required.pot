@@ -1,0 +1,50 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Login Required by NOX\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-12-14 02:04+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: \n"
+"Language: \n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.4.6; wp-5.6"
+
+#: ../../../../../nwp/wp-nox-login-required/admin/Login_Required_Admin.php:69
+msgid "Access to the blog will be made only by authenticated users."
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://github.com/nox-wp"
+msgstr ""
+
+#. URI of the plugin
+msgid "https://github.com/nox-wp/wp-nox-login-required"
+msgstr ""
+
+#. Description of the plugin
+msgid "Lock down the whole WordPress site to prevent public access."
+msgstr ""
+
+#: ../../../../../nwp/wp-nox-login-required/admin/Login_Required_Admin.php:27
+#: ../../../../../nwp/wp-nox-login-required/admin/Login_Required_Admin.php:28
+msgid "Login Required"
+msgstr ""
+
+#. Name of the plugin
+#: ../../../../../nwp/wp-nox-login-required/wp-nox-login-required.php:29
+msgid "Login Required by NOX"
+msgstr ""
+
+#. Author of the plugin
+msgid "NOX"
+msgstr ""
+
+#: ../../../../../nwp/wp-nox-login-required/admin/Login_Required_Admin.php:60
+msgid "Require Login on Frontend?"
+msgstr ""
