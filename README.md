@@ -33,3 +33,12 @@ There are various ways you can contribute:
 * Send us a Pull Request with your bug fixes and/or new features.
 * [Translate Required Login into different languages](https://translate.wordpress.org/projects/wp-plugins/wp-nox-login-required/).
 * Provide feedback and [suggestions on enhancements](https://github.com/nox-wp/wp-nox-login-required/issues?direction=desc&labels=Enhancement&page=1&sort=created&state=open).
+
+## Running Tests
+
+If you want to colaborate, before creating an pull request please make sure your code is passing our phpcs checks.
+Install the project composer dependencies, then run on the root folder:
+
+```vendor/bin/phpcs```
+
+this should run basic conde sniffer
