@@ -60,8 +60,12 @@ Thumbs.db
 *.sublime*
 *.svn*
 *prepros*
+/vendor
+composer.lock
 
 # Structure #
 #############
 /generate-wp-package
 /plugin.json
+
+
