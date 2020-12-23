@@ -54,7 +54,7 @@ class Login_Required_Admin extends Login_Required_Base {
 					$this->prefix( 'general' ),
 					__( 'General Settings', 'wp-nox-login-required' ),
 					static function () {
-						echo esc_html( '<p>' . __( 'Here you can manage if and when the functionality is available.', 'wp-nox-login-required' ) . '</p>' );
+						echo '<p>' . esc_html( __( 'Here you can manage if and when the functionality is available.', 'wp-nox-login-required' ) ) . '</p>';
 					},
 					$this->plugin_options_page_slug
 				);
@@ -121,7 +121,7 @@ class Login_Required_Admin extends Login_Required_Base {
 					$this->prefix( 'html' ),
 					__( 'Custom HTML Settings', 'wp-nox-login-required' ),
 					static function () {
-						echo esc_html( '<p>' . __( 'Here you can manage if the site will display a custom HTML content if the Login Required is enabled.', 'wp-nox-login-required' ) . '</p>' );
+						echo '<p>' . esc_html( __( 'Here you can manage if the site will display a custom HTML content if the Login Required is enabled.', 'wp-nox-login-required' ) ) . '</p>';
 					},
 					$this->plugin_options_page_slug
 				);
