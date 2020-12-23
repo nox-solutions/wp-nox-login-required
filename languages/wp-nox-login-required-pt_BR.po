@@ -1,0 +1,103 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Login Required by NOX\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-12-14 01:59+0000\n"
+"PO-Revision-Date: 2020-12-14 21:31+0000\n"
+"Last-Translator: \n"
+"Language-Team: Português do Brasil\n"
+"Language: pt_BR\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Loco-Version: 2.4.6; wp-5.6"
+
+#: ../../../../../nwp/wp-nox-login-required/admin/Login_Required_Admin.php:78
+msgid "Access to the blog will be made only by authenticated users."
+msgstr ""
+"O acesso ao blog apenas poderá ser realizado para usuários autenticados."
+
+#: ../../../../../nwp/wp-nox-login-required/plugin/Login_Required_Plugin.php:81
+msgid "API Requests are only supported for authenticated requests."
+msgstr ""
+
+#: ../../../../../nwp/wp-nox-login-required/admin/Login_Required_Admin.php:169
+msgid "Custom HTML Contents"
+msgstr "Conteúdo Personalizado em HTML"
+
+#: ../../../../../nwp/wp-nox-login-required/admin/Login_Required_Admin.php:127
+msgid "Custom HTML Settings"
+msgstr "Configurações de HTML Personalizado"
+
+#: ../../../../../nwp/wp-nox-login-required/admin/Login_Required_Admin.php:149
+msgid ""
+"Disables the default login redirect and displays a custom HTML to "
+"unauthenticated users."
+msgstr ""
+"Desabilita o redirecionamento padrão para o login e apresenta o conteúdo de "
+"um HTML personalizado aos usuários não-autenticados."
+
+#: ../../../../../nwp/wp-nox-login-required/admin/Login_Required_Admin.php:140
+msgid "Display Temporary HTML?"
+msgstr "Apresentar HTML Temporário?"
+
+#: ../../../../../nwp/wp-nox-login-required/admin/Login_Required_Admin.php:98
+msgid "Enable REST Access?"
+msgstr "Habilitar Acesso via REST?"
+
+#: ../../../../../nwp/wp-nox-login-required/admin/Login_Required_Admin.php:107
+msgid "Enable unauthenticated access to public REST endpoints."
+msgstr "Habilita acesso não autenticado para endpoints públicos REST."
+
+#: ../../../../../nwp/wp-nox-login-required/admin/Login_Required_Admin.php:54
+msgid "General Settings"
+msgstr "Configurações Gerais"
+
+#: ../../../../../nwp/wp-nox-login-required/admin/Login_Required_Admin.php:56
+msgid "Here you can manage if and when the functionality is available."
+msgstr ""
+"Aqui você pode gerenciar se e quando a funcionalidade estará disponível."
+
+#: ../../../../../nwp/wp-nox-login-required/admin/Login_Required_Admin.php:129
+msgid ""
+"Here you can manage if the site will display a custom HTML content if the "
+"Login Required is enabled."
+msgstr ""
+"Aqui você pode gerenciar se o site irá apresentar o conteúdo de um HTML se o "
+"Login Required estiver habilitado."
+
+#. Author URI of the plugin
+msgid "https://github.com/nox-wp"
+msgstr "https://github.com/nox-wp"
+
+#. URI of the plugin
+msgid "https://github.com/nox-wp/wp-nox-login-required"
+msgstr "https://github.com/nox-wp/wp-nox-login-required"
+
+#. Description of the plugin
+msgid "Lock down the whole WordPress site to prevent public access."
+msgstr "Bloqueia o acesso público a todo o site em WordPress."
+
+#: ../../../../../nwp/wp-nox-login-required/admin/Login_Required_Admin.php:32
+#: ../../../../../nwp/wp-nox-login-required/admin/Login_Required_Admin.php:33
+msgid "Login Required"
+msgstr "Login Obrigatório"
+
+#. Name of the plugin
+#: ../../../../../nwp/wp-nox-login-required/wp-nox-login-required.php:31
+msgid "Login Required by NOX"
+msgstr "Login Obrigatório por NOX"
+
+#. Author of the plugin
+msgid "NOX"
+msgstr "NOX"
+
+#: ../../../../../nwp/wp-nox-login-required/admin/Login_Required_Admin.php:69
+msgid "Require Login on Frontend?"
+msgstr "Obrigar Login no Frontend?"
+
+#: ../../../../../nwp/wp-nox-login-required/admin/Login_Required_Admin.php:209
+msgid "Under construction"
+msgstr "Em construção"

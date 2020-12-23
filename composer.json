@@ -1,0 +1,13 @@
+{
+  "name": "nox-wp/wp-nox-login-required",
+  "description": "Login Required is a WordPress plugin maintained by NOX. The plugin's main goal is to provide a safe way to prevent public access to the WordPress public site.",
+  "type": "library",
+  "license": "MIT",
+  "require-dev": {
+    "squizlabs/php_codesniffer": "3.*",
+    "wp-coding-standards/wpcs": "^2.3"
+  },
+  "scripts": {
+    "phpcs": "vendor/bin/phpcs"
+  }
+}

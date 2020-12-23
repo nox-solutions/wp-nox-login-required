@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security Bug Report
+    url: https://github.com/nox-wp/wp-nox-login-required/security/policy
+    about: Please report security vulnerabilities by sending an email to login-required@noxplugins.com.
