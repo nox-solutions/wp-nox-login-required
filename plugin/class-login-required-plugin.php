@@ -38,17 +38,28 @@ class Login_Required_Plugin extends Login_Required_Base {
 					$can_redirect = ! $uses_html;
 
 					if ( $uses_html ) {
-						$html_contents = get_option( $this->prefix( 'custom_html_contents' ) );
+						$this->register_assets();
 
-						if ( ! empty( $html_contents ) ) {
-							echo esc_html( $html_contents );
+						$theme_template  = get_template_directory() . '/login-required.php';
+						$plugin_template = __DIR__ . '/templates/login-required.php';
 
-							http_response_code( 200 );
-
-							exit;
+						if ( is_file( $theme_template ) ) {
+							add_filter(
+								'template_include',
+								static function () use ( $theme_template ) {
+									return $theme_template;
+								}
+							);
+						} else {
+							add_filter(
+								'template_include',
+								static function () use ( $plugin_template ) {
+									return $plugin_template;
+								}
+							);
 						}
 
-						$can_redirect = true;
+						return;
 					}
 
 					if ( $can_redirect ) {
@@ -91,6 +102,17 @@ class Login_Required_Plugin extends Login_Required_Base {
 					return $result;
 				}
 			);
+		}
+	}
+
+	/**
+	 * Register the Bootstrap Assets
+	 */
+	protected function register_assets() {
+		$setting_name = $this->prefix( 'custom_html_bootstrap_disabled' );
+
+		if ( (int) get_option( $setting_name ) !== 1 ) {
+			wp_enqueue_style( "{$this->plugin_slug}-bs-style", 'https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css', array(), $this->plugin_version );
 		}
 	}
 }
