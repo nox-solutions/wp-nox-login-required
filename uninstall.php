@@ -10,4 +10,6 @@ defined( 'WP_UNINSTALL_PLUGIN' ) || die();
 delete_option( 'wp_nox_lr_enabled' );
 delete_option( 'wp_nox_lr_rest_enabled' );
 delete_option( 'wp_nox_lr_custom_html' );
+delete_option( 'wp_nox_lr_custom_html_bootstrap_disabled' );
+delete_option( 'wp_nox_lr_custom_html_login_btn_disabled' );
 delete_option( 'wp_nox_lr_custom_html_contents' );
