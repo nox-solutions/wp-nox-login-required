@@ -77,7 +77,7 @@ Important: the script will create and populate the schema, but it will not delet
 
 ### PHPCS
 
-If you want to collaborate, please make sure your code is passing our phpcs checks before creating a pull request.
+If you want to collaborate, please make sure your code passes our phpcs checks before creating a pull request. 
 Install the project composer dependencies, then run the following command on the root folder:
 
 ```bash
