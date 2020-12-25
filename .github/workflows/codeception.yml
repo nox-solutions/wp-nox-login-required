@@ -54,17 +54,17 @@ jobs:
       - name: MariaDB Version
         run: mysql --version
 
-      - name: Install Apache
-        run: sudo apt-get install apache2
-
       - name: Install and Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-versions }}
-          extensions: mbstring, pdo, pdo_mysql, intl, zip, json, xdebug
+          extensions: mbstring, intl, zip, json, xdebug
           ini-values: post_max_size=256M
           tools: pecl
           coverage: true
+
+      - name: Install Apache
+        run: sudo apt-get install apache2 && sudo apt-get install libapache2-mod-php${{ matrix.php-versions }} && sudo a2enmod rewrite && sudo service apache2 restart
 
       - name: PHP Version
         run: php -v
@@ -85,7 +85,7 @@ jobs:
         run: cat ./.env.testing
 
       - name: Localhost is working?
-        run: wget 127.0.0.1 && cat index.html
+        run: wget localhost && cat index.html
 
       - name: Run Codeception
         run: php ./vendor/bin/codecept run acceptance
