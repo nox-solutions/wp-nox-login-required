@@ -84,5 +84,8 @@ jobs:
       - name: Verify Environment
         run: cat ./.env.testing
 
+      - name: Verify WP Config
+        run: cat ./wp-config.php
+
       - name: Run Codeception
         run: composer codecept run acceptance
