@@ -90,3 +90,6 @@ jobs:
 
       - name: Build WordPress ${{ matrix.wp-versions }}
         run: ./init ${{ matrix.wp-versions }}
+
+      - name: Run Codecept
+        run: composer codecept run acceptance
