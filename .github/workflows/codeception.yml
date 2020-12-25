@@ -12,7 +12,7 @@ env:
   TZ: UTC
 
 jobs:
-  build:
+  test:
 
     runs-on: ${{ matrix.operating-system }}
 
@@ -23,6 +23,16 @@ jobs:
         wp-versions: [ '5.6' ]
 
     name: WordPress ${{ matrix.wp-versions }} using PHP ${{ matrix.php-versions }} and tested on ${{ matrix.operating-system }}
+
+    env:
+      SELENIUM_HOST: http://selenium:4444/wd/hub
+
+    services:
+      selenium:
+        image: selenium/standalone-chrome
+        # options: --health-cmd "curl http://selenium:4444" --health-interval=5s
+        ports:
+          - 4444:4444
 
     steps:
       - name: Prepare
@@ -53,6 +63,9 @@ jobs:
           tools: pecl
           coverage: true
 
+      - name: Install Apache
+        run: sudo apt-get install apache2
+
       - name: Check PHP Version
         run: php -v
 
@@ -74,3 +87,6 @@ jobs:
       - name: Install composer dependencies
         if: steps.composer-cache.outputs.cache-hit != 'true'
         run: composer install --prefer-dist --no-progress --no-suggest
+
+      - name: Build WordPress ${{ matrix.wp-versions }}
+        run: ./init ${{ matrix.wp-versions }}
