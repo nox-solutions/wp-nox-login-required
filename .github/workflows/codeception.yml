@@ -24,28 +24,12 @@ jobs:
 
     name: WordPress ${{ matrix.wp-versions }} using PHP ${{ matrix.php-versions }} and tested on ${{ matrix.operating-system }}
 
-    services:
-      mariadb:
-        image: mariadb:latest
-        ports:
-          - 3306/tcp
-        env:
-          MYSQL_USER: root
-          MYSQL_PASSWORD: root
-          MYSQL_DATABASE: test
-          MYSQL_ROOT_PASSWORD: root
-
     steps:
       - name: Prepare
         run: sudo chown -R $USER:$USER ${{ github.workspace }}
 
-      - name: Verify MariaDB connection
-        env:
-          PORT: ${{ job.services.mariadb.ports[3306] }}
-        run: |
-          while ! mysqladmin ping -h"127.0.0.1" -P"$PORT" --silent; do
-            sleep 1
-          done
+      - name: Verify MySQL
+        run: mysql --version
 
       - name: Checkout
         uses: actions/checkout@v2
