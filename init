@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+
+ROOT=$(pwd)
+
+if [[ $# -eq 0 ]]; then
+  echo 'Please inform the WordPress version.'
+
+  exit 1
+fi
+
+echo "Verifying WordPress CLI Version:"
+
+wp cli version ||
+  (
+    curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar &&
+      /usr/bin/php wp-cli.phar --info &&
+      chmod +x wp-cli.phar &&
+      sudo mv wp-cli.phar /usr/local/bin/wpTEST_SITE_DB_HOST
+  )
+
+if [ -f ./.env.testing ]; then
+  sed -E 's/^(.*)$/export \1/g' ./.env.testing > ./.profile && source ./.profile
+fi
+
+WP_VERSION=$1
+WP_BASE_NAME="nox_wp_${WP_VERSION//./}"
+WP_DB_NAME="nox_wp${WP_VERSION//./}"
+WP_PATH="./tests/_data/wp/${WP_BASE_NAME}"
+
+echo "Installing WordPress version ${WP_VERSION} (DB NAME: ${WP_DB_NAME} / PATH: ${WP_PATH})"
+
+/usr/bin/mysql -h "${TEST_DB_HOST}" -u "${TEST_DB_USER}" -p"${TEST_DB_PASSWORD}" -e "DROP DATABASE IF EXISTS ${WP_DB_NAME};CREATE DATABASE IF NOT EXISTS ${WP_DB_NAME} CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+
+[ -d "${WP_PATH}" ] && rm -rf "${WP_PATH}"
+
+mkdir -p "${WP_PATH}" && cd "${WP_PATH}" && pwd
+
+wp core download --version="${WP_VERSION}"
+
+wp config create --dbname="${WP_DB_NAME}" --dbuser="${TEST_DB_USER}" --dbpass="${TEST_DB_PASSWORD}"
+
+wp core install --url="${TEST_SITE_WP_DOMAIN}" --title="NOX Theme Test" --admin_user="${TEST_SITE_ADMIN_USERNAME}" --admin_password="${TEST_SITE_ADMIN_PASSWORD}" --admin_email=support@noxthemes.com --skip-email --quiet
+
+wp user create adam adam@noxpluginx.com --role=editor --user_pass=
+
+DUMP_FILE="./tests/_data/db/dump.sql"
+
+cd "${ROOT}" && pwd
+
+[ -f "${DUMP_FILE}" ] && rm -rf "${DUMP_FILE}"
+
+/usr/bin/mysqldump -h "${TEST_DB_HOST}" -u "${TEST_DB_USER}" -p"${TEST_DB_PASSWORD}" --routines --triggers "${WP_DB_NAME}" > "${DUMP_FILE}"

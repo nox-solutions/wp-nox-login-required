@@ -1,0 +1,76 @@
+#!/usr/bin/env php
+<?php
+
+$schema_name = ( ( ! empty( $argv[1] ) ) ? $argv[1] : '' );
+
+if ( empty( $schema_name ) ) {
+	echo "DB schema name is required.\n";
+
+	exit(1);
+}
+
+$config = require __DIR__ . '/tests/_config/testing.php';
+
+$local_config = [];
+
+$local_config_file = __DIR__ . '/tests/_config/testing-local.php';
+
+if ( is_file( $local_config_file ) ) {
+	/** @noinspection PhpIncludeInspection */
+	$local_config = require $local_config_file;
+
+	if ( ! is_array( $local_config ) ) {
+		$local_config = [];
+	}
+}
+
+if ( ! is_array( $config ) ) {
+	$config = [];
+}
+
+$config = array_merge( $config, $local_config );
+
+$env_file         = __DIR__ . '/.env.testing';
+$env_profile_file = __DIR__ . '/.env.profile';
+
+if ( is_file( $env_file ) ) {
+	unlink( $env_file );
+}
+
+if ( is_file( $env_profile_file ) ) {
+	unlink( $env_profile_file );
+}
+
+file_put_contents(
+		$env_file,
+		implode(
+				"\n",
+				array_map(
+						static function ( $value, $key ) use ( $schema_name ) {
+							$value = str_replace('{DB}', $schema_name, $value);
+
+							return "{$key}=\"{$value}\"";
+						},
+						$config,
+						array_keys( $config )
+				)
+		),
+		LOCK_EX
+);
+
+file_put_contents(
+		$env_profile_file,
+		"#!/usr/bin/env bash\n\n" . implode(
+				"\n",
+				array_map(
+						static function ( $value, $key ) use ( $schema_name ) {
+							$value = str_replace('{DB}', $schema_name, $value);
+
+							return "export {$key}=\"{$value}\"";
+						},
+						$config,
+						array_keys( $config )
+				)
+		),
+		LOCK_EX
+);
