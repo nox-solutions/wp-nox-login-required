@@ -1,0 +1,95 @@
+#!/usr/bin/env php
+<?php
+
+function contains( $str, array $arr ) {
+	foreach ( $arr as $a ) {
+		if ( stripos( $str, $a ) !== false ) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+function zip_files( $source, $destination, $ignored = array() ) {
+	$zip = new ZipArchive();
+
+	if ( $zip->open( $destination, ZIPARCHIVE::CREATE ) === true ) {
+		$source = str_replace( '\\', '/', realpath( $source ) );
+
+		if ( is_dir( $source ) ) {
+			$iterator = new RecursiveDirectoryIterator( $source );
+
+			$iterator->setFlags( RecursiveDirectoryIterator::SKIP_DOTS );
+
+			$files = new RecursiveIteratorIterator( $iterator, RecursiveIteratorIterator::SELF_FIRST );
+
+			foreach ( $files as $file ) {
+				$file = str_replace( '\\', '/', realpath( $file ) );
+
+				if ( contains( $file, $ignored ) ) {
+					continue;
+				}
+
+				if ( is_dir( $file ) ) {
+					$dir = str_replace( "{$source}/", '', "{$file}/" );
+
+					$zip->addEmptyDir( $dir );
+				} elseif ( is_file( $file ) ) {
+					$zip->addFile( $file, str_replace( "{$source}/", '', $file ) );
+				}
+			}
+		} elseif ( is_file( $source ) ) {
+			if ( ! in_array( $source, $ignored, true ) ) {
+				$zip->addFile( $source, basename( $source ) );
+			}
+		}
+	}
+
+	return $zip->close();
+}
+
+function find_ignored_items() {
+	$ignore_items = array();
+	$ignore_file  = __DIR__ . '/.distignore';
+
+	if ( is_file( $ignore_file ) ) {
+		$ignore_items = explode( "\n", (string) file_get_contents( $ignore_file ) );
+
+		$ignore_items = array_values(
+				array_filter(
+						array_map(
+								static function ( $item ) {
+									$item = trim( $item );
+
+									if ( empty( $item ) ) {
+										return null;
+									}
+
+									if ( ! preg_match( '/^\/.*$/', $item ) ) {
+										$item = "/{$item}";
+									}
+
+									return __DIR__ . $item;
+								},
+								$ignore_items
+						),
+						static function ( $value ) {
+							return ! empty( $value );
+						}
+				)
+		);
+	}
+
+	return $ignore_items;
+}
+
+$ignore_items = find_ignored_items();
+
+$package_path = __DIR__ . '/tests/_data/plugin/wp-nox-login-required.zip';
+
+if ( is_file( $package_path ) ) {
+	unlink( $package_path );
+}
+
+zip_files( __DIR__, $package_path, $ignore_items );
