@@ -77,8 +77,14 @@ jobs:
       - name: Localhost is working?
         run: wget localhost && cat index.html
 
-      - name: Prepare Selenium
+      - name: Prepare Selenium and Google Chrome
         run: |
+          sudo apt-get update
+          sudo apt-get upgrade google-chrome-stable -y
+          google-chrome --version
+          export DISPLAY=:99
+          chromedriver --url-base=/wd/hub &
+          sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional, disables headless mode
           sudo mkdir -p /opt/tests
           sudo wget https://selenium-release.storage.googleapis.com/3.141/selenium-server-standalone-3.141.59.jar -O /opt/tests/selenium.jar
           sudo chmod +x /opt/tests/selenium.jar
@@ -86,13 +92,6 @@ jobs:
           sudo unzip /opt/tests/chromedriver.zip -d /opt/tests
           sudo chmod +x /opt/tests/chromedriver
           sudo java -Dwebdriver.chrome.driver=/opt/tests/chromedriver -jar /opt/tests/selenium.jar &
-
-      - name: Launch browser
-        run: |
-          google-chrome --version
-          export DISPLAY=:99
-          chromedriver --url-base=/wd/hub &
-          sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional, disables headless mode
 
       - name: Run Codeception
         run: php ./vendor/bin/codecept run acceptance
