@@ -1,0 +1,68 @@
+name: Codeception Tests
+
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+
+    runs-on: ${{ matrix.operating-system }}
+
+    strategy:
+      matrix:
+        operating-system: [ ubuntu-latest ]
+        php-versions: [ '5.6', '7.0', '7.1', '7.2', '7.3' ]
+        wp-versions: [ '4.9', '5.0', '5.1', '5.2', '5.3', '5.4', '5.5', '5.6' ]
+
+    name: WordPress ${{ matrix.wp-versions }} using PHP ${{ matrix.php-versions }} and tested on ${{ matrix.operating-system }}
+
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: root
+          MYSQL_ALLOW_EMPTY_PASSWORD: true
+        ports:
+          - 33306:3306
+
+    steps:
+      - name: Prepare
+        run: sudo chown -R $USER:$USER ${{ github.workspace }}
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v1
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: mbstring, pdo, pdo_mysql, intl, zip, json, xdebug
+          coverage: true
+
+      - name: Check PHP Version
+        run: php -v
+
+      - name: Check PHP Extensions
+        run: php -m
+
+      - name: Validate composer.json and composer.lock
+        run: composer validate
+
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v2
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
+
+      - name: Install composer dependencies
+        if: steps.composer-cache.outputs.cache-hit != 'true'
+        run: composer install --prefer-dist --no-progress --no-suggest
