@@ -2,6 +2,7 @@
 <?php
 
 $schema_name = ( ( ! empty( $argv[1] ) ) ? $argv[1] : '' );
+$wp_version  = ( ( ! empty( $argv[2] ) ) ? $argv[2] : '' );
 
 if ( empty( $schema_name ) ) {
 	echo "DB schema name is required.\n";
@@ -46,8 +47,8 @@ file_put_contents(
 		implode(
 				"\n",
 				array_map(
-						static function ( $value, $key ) use ( $schema_name ) {
-							$value = str_replace('{DB}', $schema_name, $value);
+						static function ( $value, $key ) use ( $schema_name, $wp_version ) {
+							$value = str_replace( array( '{DB}', '{VERSION}' ), array( $schema_name, $wp_version ), $value );
 
 							return "{$key}=\"{$value}\"";
 						},
@@ -63,8 +64,8 @@ file_put_contents(
 		"#!/usr/bin/env bash\n\n" . implode(
 				"\n",
 				array_map(
-						static function ( $value, $key ) use ( $schema_name ) {
-							$value = str_replace('{DB}', $schema_name, $value);
+						static function ( $value, $key ) use ( $schema_name, $wp_version ) {
+							$value = str_replace( array( '{DB}', '{VERSION}' ), array( $schema_name, $wp_version ), $value );
 
 							return "export {$key}=\"{$value}\"";
 						},

@@ -4,6 +4,7 @@ paths:
   data: tests/_data
   support: tests/_support
   envs: tests/_envs
+  log: tests/_logs
 actor_suffix: Tester
 extensions:
   enabled:
@@ -18,3 +19,7 @@ extensions:
     - Codeception\Command\GenerateWPXMLRPC
 params:
   - .env.testing
+settings:
+  colors: true
+  steps: true
+  memory_limit: 1024M

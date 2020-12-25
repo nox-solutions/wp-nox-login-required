@@ -30,7 +30,7 @@ return [
 	'TEST_SITE_CONTRIBUTOR_EMAIL'    => 'iris@noxplugins.com',
 	'TEST_SITE_CONTRIBUTOR_PASSWORD' => 'contributor',
 
-	'TEST_SITE_TITLE'                => 'NOX Plugin Test',
+	'TEST_SITE_TITLE'                => 'NOX Plugin Test | WP {VERSION}',
 	'TEST_SITE_WP_URL'               => 'http://localhost',
 	'TEST_SITE_WP_DOMAIN'            => 'localhost',
 	'WP_ROOT_FOLDER'                 => '/var/www/html',

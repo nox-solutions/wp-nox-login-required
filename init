@@ -23,7 +23,7 @@ WP_BASE_NAME="nox_wp_${WP_VERSION//./}"
 WP_DB_NAME="nox_wp${WP_VERSION//./}"
 WP_PATH="${ROOT}/tests/_data/wp/${WP_BASE_NAME}"
 
-/usr/bin/php "${ROOT}/config" "${WP_DB_NAME}"
+/usr/bin/php "${ROOT}/config" "${WP_DB_NAME}" "${WP_VERSION}"
 /usr/bin/php "${ROOT}/package"
 
 source "${ROOT}/.env.profile" || exit 1
@@ -40,7 +40,7 @@ wp core download --version="${WP_VERSION}"
 
 wp config create --dbname="${WP_DB_NAME}" --dbuser="${TEST_DB_USER}" --dbpass="${TEST_DB_PASSWORD}"
 
-wp core install --url="${TEST_SITE_WP_DOMAIN}" --title="${TEST_SITE_TITLE} | WP ${WP_VERSION}" --admin_user="${TEST_SITE_ADMIN_USERNAME}" --admin_password="${TEST_SITE_ADMIN_PASSWORD}" --admin_email="${TEST_SITE_ADMIN_EMAIL}" --skip-email --quiet
+wp core install --url="${TEST_SITE_WP_DOMAIN}" --title="${TEST_SITE_TITLE}" --admin_user="${TEST_SITE_ADMIN_USERNAME}" --admin_password="${TEST_SITE_ADMIN_PASSWORD}" --admin_email="${TEST_SITE_ADMIN_EMAIL}" --skip-email --quiet
 
 wp plugin install "${ROOT}/tests/_data/plugin/wp-nox-login-required.zip"
 
