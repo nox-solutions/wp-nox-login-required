@@ -30,7 +30,7 @@ source "${ROOT}/.env.profile" || exit 1
 
 echo "Installing WordPress version ${WP_VERSION} (DB NAME: ${WP_DB_NAME} / PATH: ${WP_PATH})"
 
-/usr/bin/mysql -h "${TEST_DB_HOST}" -u "${TEST_DB_USER}" -p"${TEST_DB_PASSWORD}" -e "DROP DATABASE IF EXISTS ${WP_DB_NAME};CREATE DATABASE IF NOT EXISTS ${WP_DB_NAME} CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+/usr/bin/mysql -h "${TEST_DB_HOST}" -u "${TEST_DB_USER}" -p"${TEST_DB_PASSWORD}" -e "DROP DATABASE IF EXISTS ${WP_DB_NAME};CREATE DATABASE IF NOT EXISTS ${WP_DB_NAME} CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;" || { echo "Could not connect to DB." ; exit 1; }
 
 [ -d "${WP_PATH}" ] && rm -rf "${WP_PATH}"
 
@@ -54,13 +54,13 @@ cd "${ROOT}" && pwd
 
 [ -f "${DUMP_FILE}" ] && rm -rf "${DUMP_FILE}"
 
-/usr/bin/mysqldump -h "${TEST_DB_HOST}" -u "${TEST_DB_USER}" -p"${TEST_DB_PASSWORD}" --routines --triggers "${WP_DB_NAME}" >"${DUMP_FILE}"
+/usr/bin/mysqldump -h "${TEST_DB_HOST}" -u "${TEST_DB_USER}" -p"${TEST_DB_PASSWORD}" --routines --triggers "${WP_DB_NAME}" >"${DUMP_FILE}" || { echo "Could not connect to DB." ; exit 1; }
 
 if [ "${WP_ROOT_FOLDER}" != "${WP_PATH}" ]; then
 
-  [ -d "${WP_ROOT_FOLDER}" ] && rm -rf "${WP_ROOT_FOLDER}"
-  [ -L "${WP_ROOT_FOLDER}" ] && unlink "${WP_ROOT_FOLDER}"
+  [ -d "${WP_ROOT_FOLDER}" ] && (rm -rf "${WP_ROOT_FOLDER}" || sudo rm -rf "${WP_ROOT_FOLDER}")
+  [ -L "${WP_ROOT_FOLDER}" ] && (unlink "${WP_ROOT_FOLDER}" || sudo unlink "${WP_ROOT_FOLDER}")
 
-  ln -s "${WP_PATH}" "${WP_ROOT_FOLDER}"
+  ln -s "${WP_PATH}" "${WP_ROOT_FOLDER}" || sudo ln -s "${WP_PATH}" "${WP_ROOT_FOLDER}"
 
 fi
