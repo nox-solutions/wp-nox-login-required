@@ -8,6 +8,9 @@ on:
     branches:
       - main
 
+env:
+  TZ: UTC
+
 jobs:
   build:
 
@@ -23,9 +26,9 @@ jobs:
 
     services:
       mariadb:
-        image: mariadb:10.5
+        image: mariadb:10.4
         ports:
-          - 3306
+          - 3306/tcp
         env:
           MYSQL_USER: root
           MYSQL_PASSWORD: root
