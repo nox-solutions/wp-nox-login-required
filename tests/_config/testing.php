@@ -1,15 +1,15 @@
 <?php
 
 return [
-	'TEST_SITE_DB_DSN'               => 'mysql:host=localhost;dbname={DB}',
-	'TEST_SITE_DB_HOST'              => 'localhost',
+	'TEST_SITE_DB_DSN'               => 'mysql:host=127.0.0.1;dbname={DB}',
+	'TEST_SITE_DB_HOST'              => '127.0.0.1',
 	'TEST_SITE_DB_NAME'              => '{DB}',
 	'TEST_SITE_DB_USER'              => 'root',
 	'TEST_SITE_DB_PASSWORD'          => 'root',
 	'TEST_SITE_TABLE_PREFIX'         => 'wp_',
 
 	'TEST_DB_NAME'                   => '{DB}',
-	'TEST_DB_HOST'                   => 'localhost',
+	'TEST_DB_HOST'                   => '127.0.0.1',
 	'TEST_DB_USER'                   => 'root',
 	'TEST_DB_PASSWORD'               => 'root',
 	'TEST_TABLE_PREFIX'              => 'wp_',

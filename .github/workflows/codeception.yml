@@ -35,26 +35,29 @@ jobs:
           - 4444:4444
 
     steps:
-      - name: Prepare
-        run: sudo chown -R $USER:$USER ${{ github.workspace }}
+      - name: Checkout
+        uses: actions/checkout@v2
 
       - name: Shutdown Ubuntu MySQL
         run: sudo service mysql stop
 
-      - name: Set up MariaDB
+      - name: Install MariaDB
         uses: getong/mariadb-action@v1.1
         with:
           character set server: 'utf8'
           collation server: 'utf8_general_ci'
-          mariadb version: '10.5.8'
+          mariadb version: 'latest'
           mysql root password: 'root'
           mysql user: 'root'
           mysql password: 'root'
 
-      - name: Checkout
-        uses: actions/checkout@v2
+      - name: MariaDB Version
+        run: mysql --version
 
-      - name: Setup PHP
+      - name: Install Apache
+        run: sudo apt-get install apache2
+
+      - name: Install and Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-versions }}
@@ -63,19 +66,16 @@ jobs:
           tools: pecl
           coverage: true
 
-      - name: Install Apache
-        run: sudo apt-get install apache2
-
-      - name: Check PHP Version
+      - name: PHP Version
         run: php -v
 
-      - name: Check PHP Extensions
+      - name: PHP Extensions
         run: php -m
 
-      - name: Validate composer.json and composer.lock
+      - name: Validate Composer
         run: composer validate
 
-      - name: Cache Composer packages
+      - name: Cache Composer Packages
         id: composer-cache
         uses: actions/cache@v2
         with:
@@ -84,7 +84,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-php-
 
-      - name: Install composer dependencies
+      - name: Install Composer Dependencies
         if: steps.composer-cache.outputs.cache-hit != 'true'
         run: composer install --prefer-dist --no-progress --no-suggest
 
