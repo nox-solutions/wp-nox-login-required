@@ -22,7 +22,7 @@ jobs:
         php-versions: [ '5.6' ]
         wp-versions: [ '5.6' ]
 
-    name: WordPress ${{ matrix.wp-versions }} using PHP ${{ matrix.php-versions }} and tested on ${{ matrix.operating-system }}
+    name: WP ${{ matrix.wp-versions }} | PHP ${{ matrix.php-versions }} | ${{ matrix.operating-system }}
 
     env:
       SELENIUM_HOST: http://selenium:4444/wd/hub
@@ -75,21 +75,14 @@ jobs:
       - name: Validate Composer
         run: composer validate
 
-      - name: Cache Composer Packages
-        id: composer-cache
-        uses: actions/cache@v2
-        with:
-          path: vendor
-          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-php-
-
       - name: Install Composer Dependencies
-        if: steps.composer-cache.outputs.cache-hit != 'true'
-        run: composer install --prefer-dist --no-progress --no-suggest
+        run: composer install --prefer-dist --no-suggest
 
       - name: Build WordPress ${{ matrix.wp-versions }}
         run: ./init ${{ matrix.wp-versions }}
 
-      - name: Run Codecept
+      - name: Verify Environment
+        run: cat ./.env.testing
+
+      - name: Run Codeception
         run: composer codecept run acceptance
