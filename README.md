@@ -52,6 +52,29 @@ After the initialization process, you can use both PHPCS and Codeception to test
 
 Note: in the configuration files, you may use the {DB} param to indicate the schema name. This param will be replaced by the correct schema name based on the WordPress version indicated in the initialization script.
 
+### Initialization script call examples
+
+The plugin requires at least WordPress 4.9.0 and PHP 5.6. All the tests run in major WordPress and PHP releases. To reproduce in your local environment the base NOX WordPress installations, you can run the following commands:
+
+```bash
+
+./init 4.9
+./init 5.0
+./init 5.1
+./init 5.2
+./init 5.3
+./init 5.4
+./init 5.5
+./init 5.6
+
+```
+
+Important note: the variable `WP_ROOT_FOLDER` should have your Virtual Host real path (like `/var/www/html`). The initialization script will try to remove it and create a symbolic link to the internal WordPress configured. 
+Example: if you run `./init 5.6` the internal path will be `/tests/_data/wp/nox_wp_56` and the html folder will link to it. For this behavior to work, you must have write access to the mentioned folders.
+
+Note about the database: the initialization script will try to connect to your local database and create the necessary schemas. The name pattern is `nox_wp<VERSION>` (for WordPress 5.6, the name will be nox_wp56). 
+Important: the script will create and populate the schema, but it will not delete it.
+
 ### PHPCS
 
 If you want to collaborate, please make sure your code is passing our phpcs checks before creating a pull request.

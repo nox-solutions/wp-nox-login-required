@@ -14,8 +14,8 @@ return [
 	'TEST_DB_PASSWORD'               => 'root',
 	'TEST_TABLE_PREFIX'              => 'wp_',
 
-	'TEST_SITE_ADMIN_USERNAME'       => 'admin',
-	'TEST_SITE_ADMIN_PASSWORD'       => 'admin',
+	'TEST_SITE_ADMIN_USERNAME'       => 'nox',
+	'TEST_SITE_ADMIN_PASSWORD'       => 'nox',
 	'TEST_SITE_ADMIN_EMAIL'          => 'support@noxplugins.com',
 
 	'TEST_SITE_EDITOR_USERNAME'      => 'adam',
