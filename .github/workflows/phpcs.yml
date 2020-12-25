@@ -32,5 +32,15 @@ jobs:
         if: steps.composer-cache.outputs.cache-hit != 'true'
         run: composer install --prefer-dist --no-progress --no-suggest
 
+      - name: Prepare Selenium
+        run: |
+          sudo mkdir -p /opt/tests
+          sudo wget https://selenium-release.storage.googleapis.com/3.141/selenium-server-standalone-3.141.59.jar -O /opt/tests/selenium.jar
+          sudo chmod +x /opt/tests/selenium.jar
+          sudo wget https://chromedriver.storage.googleapis.com/88.0.4324.27/chromedriver_linux64.zip -O /opt/tests/chromedriver.zip
+          sudo unzip /opt/tests/chromedriver.zip
+          sudo chmod +x /opt/tests/chromedriver
+          sudo java -Dwebdriver.chrome.driver=/opt/tests/chromedriver -jar /opt/tests/selenium.jar -browserSideLog -debug -timeout 60
+
       - name: Run phpcs in the project
         run: composer phpcs
