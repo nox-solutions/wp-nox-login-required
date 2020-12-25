@@ -31,8 +31,8 @@ return [
 	'TEST_SITE_CONTRIBUTOR_PASSWORD' => 'contributor',
 
 	'TEST_SITE_TITLE'                => 'NOX Plugin Test | WP {VERSION}',
-	'TEST_SITE_WP_URL'               => 'http://localhost',
-	'TEST_SITE_WP_DOMAIN'            => 'localhost',
+	'TEST_SITE_WP_URL'               => 'http://127.0.0.1',
+	'TEST_SITE_WP_DOMAIN'            => '127.0.0.1',
 	'WP_ROOT_FOLDER'                 => '/var/www/html',
 	'TEST_SITE_WP_ADMIN_PATH'        => '/wp-admin',
 ];
