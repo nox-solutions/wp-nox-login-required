@@ -84,6 +84,12 @@ jobs:
       - name: Verify Environment
         run: cat ./.env.testing
 
+      - name: Verify Hosts
+        run: cat /etc/hosts
+
+      - name: Localhost is working?
+        run: wget 127.0.0.1
+
       - name: Run Codeception
         run: php ./vendor/bin/codecept run acceptance
 
