@@ -24,16 +24,6 @@ jobs:
 
     name: WP ${{ matrix.wp-versions }} | PHP ${{ matrix.php-versions }} | ${{ matrix.operating-system }}
 
-    env:
-      SELENIUM_HOST: http://selenium:4444/wd/hub
-
-    services:
-      selenium:
-        image: selenium/standalone-chrome
-        # options: --health-cmd "curl http://selenium:4444" --health-interval=5s
-        ports:
-          - 4444:4444
-
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -88,7 +78,14 @@ jobs:
         run: wget localhost && cat index.html
 
       - name: Prepare Selenium
-        uses: nanasess/setup-chromedriver@master
+        run: |
+          sudo mkdir -p /opt/tests
+          sudo wget https://selenium-release.storage.googleapis.com/3.141/selenium-server-standalone-3.141.59.jar -O /opt/tests/selenium.jar
+          sudo chmod +x /opt/tests/seleniu.jar
+          sudo wget https://chromedriver.storage.googleapis.com/88.0.4324.27/chromedriver_linux64.zip -O /opt/tests/chromedriver.zip
+          sudo unzip /opt/tests/chromedriver.zip
+          sudo chmod +x /opt/tests/chromedriver
+          sudo java -Dwebdriver.chrome.driver=/opt/tests/chromedriver -jar /opt/tests/selenium.jar -browserSideLog -debug -timeout 60
 
       - name: Launch browser
         run: |
