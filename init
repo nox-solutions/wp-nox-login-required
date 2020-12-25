@@ -38,7 +38,7 @@ mkdir -p "${WP_PATH}" && cd "${WP_PATH}" && pwd
 
 wp core download --version="${WP_VERSION}"
 
-wp config create --dbname="${WP_DB_NAME}" --dbuser="${TEST_DB_USER}" --dbpass="${TEST_DB_PASSWORD}"
+wp config create --dbhost="${TEST_DB_HOST}" --dbname="${WP_DB_NAME}" --dbuser="${TEST_DB_USER}" --dbpass="${TEST_DB_PASSWORD}"
 
 wp core install --url="${TEST_SITE_WP_DOMAIN}" --title="${TEST_SITE_TITLE}" --admin_user="${TEST_SITE_ADMIN_USERNAME}" --admin_password="${TEST_SITE_ADMIN_PASSWORD}" --admin_email="${TEST_SITE_ADMIN_EMAIL}" --skip-email --quiet
 
