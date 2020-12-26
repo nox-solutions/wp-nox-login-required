@@ -19,6 +19,15 @@ jobs:
 
     name: WP ${{ matrix.wp-versions }} | PHP ${{ matrix.php-versions }} | ${{ matrix.operating-system }}
 
+    services:
+      hub:
+        image: selenium/hub:3.141.59
+      firefox:
+        image: selenium/node-chrome:87.0
+        env:
+          HUB_HOST: hub
+          HUB_PORT: 4444
+
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -83,17 +92,10 @@ jobs:
         run: cat ./.env.testing
 
       - name: Localhost is working?
-        run: wget localhost && cat index.html
-
-      - name: Prepare Selenium and Google Chrome
         run: |
-          sudo mkdir -p /opt/tests
-          sudo wget https://selenium-release.storage.googleapis.com/3.141/selenium-server-standalone-3.141.59.jar -O /opt/tests/selenium.jar
-          sudo chmod +x /opt/tests/selenium.jar
-          sudo wget https://chromedriver.storage.googleapis.com/87.0.4280.88/chromedriver_linux64.zip -O /opt/tests/chromedriver.zip
-          sudo unzip /opt/tests/chromedriver.zip -d /opt/tests
-          sudo chmod +x /opt/tests/chromedriver
-          sudo java -Dwebdriver.chrome.driver=/opt/tests/chromedriver -jar /opt/tests/selenium.jar &
+          wget localhost -O ./wp.html
+          cat ./wp.html
+          rm -rf ./wp.html
 
       - name: Run Codeception
         run: php ./vendor/bin/codecept run acceptance
