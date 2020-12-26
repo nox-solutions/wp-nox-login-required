@@ -25,7 +25,7 @@ jobs:
         ports:
           - '4444:4444'
       chrome:
-        image: selenium/node-chrome:87.0
+        image: selenium/node-chrome:3.141.59
         env:
           HUB_HOST: hub
           HUB_PORT: 4444
