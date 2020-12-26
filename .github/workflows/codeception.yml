@@ -1,15 +1,10 @@
 name: Codeception Tests
 
-on:
-  push:
-    branches:
-      - '**'
-  pull_request:
-    branches:
-      - main
+on: [ push, pull_request ]
 
 env:
   TZ: UTC
+  DEFAULT_COMPOSER_FLAGS: "--prefer-dist --no-interaction --no-progress --optimize-autoloader --ansi"
 
 jobs:
   test:
@@ -54,19 +49,32 @@ jobs:
           coverage: true
 
       - name: Install Apache
-        run: sudo apt-get install apache2 && sudo apt-get install libapache2-mod-php${{ matrix.php-versions }} && sudo a2enmod rewrite && sudo service apache2 restart
+        run: |
+          sudo apt-get install -y libapache2-mod-php${{ matrix.php-versions }}
+          sudo a2enmod rewrite
+          sudo service apache2 restart
 
-      - name: PHP Version
-        run: php -v
-
-      - name: PHP Extensions
-        run: php -m
+      - name: PHP Version and Extensions
+        run: |
+          php -v
+          php -m
 
       - name: Validate Composer
         run: composer validate
 
-      - name: Install Composer Dependencies
-        run: composer install --prefer-dist --no-suggest --no-progress
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Cache Composer Dependencies
+        uses: actions/cache@v1
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Install dependencies
+        run: composer update $DEFAULT_COMPOSER_FLAGS
 
       - name: Build WordPress ${{ matrix.wp-versions }}
         run: ./init ${{ matrix.wp-versions }}
