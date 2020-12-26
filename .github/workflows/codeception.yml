@@ -20,14 +20,14 @@ jobs:
     name: WP ${{ matrix.wp-versions }} | PHP ${{ matrix.php-versions }} | ${{ matrix.operating-system }}
 
     services:
-      hub:
+      selenium:
         image: selenium/hub:3.141.59
         ports:
           - '4444:4444'
       chrome:
         image: selenium/node-chrome:3.141.59
         env:
-          HUB_HOST: hub
+          HUB_HOST: selenium
           HUB_PORT: 4444
 
     steps:
