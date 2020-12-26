@@ -22,7 +22,9 @@ jobs:
     services:
       hub:
         image: selenium/hub:3.141.59
-      firefox:
+        ports:
+          - '4444:4444'
+      chrome:
         image: selenium/node-chrome:87.0
         env:
           HUB_HOST: hub
