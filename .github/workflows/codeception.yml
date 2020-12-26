@@ -21,14 +21,9 @@ jobs:
 
     services:
       selenium:
-        image: selenium/hub:3.141.59
+        image: 87.0.4280.88-chromedriver-87.0.4280.88
         ports:
           - '4444:4444'
-      chrome:
-        image: selenium/node-chrome:3.141.59
-        env:
-          HUB_HOST: selenium
-          HUB_PORT: 4444
 
     steps:
       - name: Checkout
