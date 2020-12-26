@@ -36,6 +36,6 @@ return [
 	'WP_ROOT_FOLDER'                 => '/var/www/html',
 	'TEST_SITE_WP_ADMIN_PATH'        => '/wp-admin',
 
-	'TEST_SELENIUM_HOST'             => 'selenium',
+	'TEST_SELENIUM_HOST'             => '127.0.0.1',
 	'TEST_SELENIUM_PORT'             => 4444,
 ];
