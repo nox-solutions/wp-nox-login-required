@@ -1,3 +1,6 @@
+![PHPCS](https://github.com/nox-wp/wp-nox-login-required/workflows/PHP%20CS/badge.svg)
+![Codeception](https://github.com/nox-wp/wp-nox-login-required/workflows/Codeception%20Tests/badge.svg)
+
 # Login Required by NOX for WordPress
 
 Login Required is a WordPress plugin maintained by NOX. The plugin's main goal is to provide a safe way to prevent public access to the WordPress public site. 
