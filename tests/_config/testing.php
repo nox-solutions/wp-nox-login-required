@@ -35,4 +35,7 @@ return [
 	'TEST_SITE_WP_DOMAIN'            => '127.0.0.1',
 	'WP_ROOT_FOLDER'                 => '/var/www/html',
 	'TEST_SITE_WP_ADMIN_PATH'        => '/wp-admin',
+
+	'TEST_SELENIUM_HOST'             => 'selenium',
+	'TEST_SELENIUM_PORT'             => 4444,
 ];

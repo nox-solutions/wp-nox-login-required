@@ -23,6 +23,8 @@ modules:
       adminPath: '%TEST_SITE_WP_ADMIN_PATH%'
       browser: chrome
       window_size: false
+      host: '%TEST_SELENIUM_HOST%'
+      port: '%TEST_SELENIUM_PORT%'
       capabilities:
         "goog:chromeOptions":
           args: ["--no-sandbox", "--headless", "--disable-gpu", "--user-agent=wp-browser", "allow-insecure-localhost", "--ignore-certificate-errors"]
