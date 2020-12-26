@@ -1,6 +1,6 @@
 === Login Required ===
 Contributors: noxwp
-Requires at least: 5.4.1
+Requires at least: 4.9.0
 Tested up to: 5.6.0
 Requires PHP: 5.6.0
 Stable tag: 1.0.0

@@ -1,3 +1,6 @@
+![PHPCS](https://github.com/nox-wp/wp-nox-login-required/workflows/PHP%20CS/badge.svg)
+![Codeception](https://github.com/nox-wp/wp-nox-login-required/workflows/Codeception%20Tests/badge.svg)
+
 # Login Required by NOX for WordPress
 
 Login Required is a WordPress plugin maintained by NOX. The plugin's main goal is to provide a safe way to prevent public access to the WordPress public site. 
@@ -32,22 +35,64 @@ It may help us a lot if you can provide a backtrace of the error encountered. Yo
 
 ## Contributions
 
-Anyone is welcome to contribute to Required Plugin. Please
-[read the guidelines](.github/CONTRIBUTING.md) for contributing to this
-repository.
+Anyone is welcome to contribute to Required Plugin by NOX.
 
 There are various ways you can contribute:
 
-* [Raise an issue](https://github.com/nox-wp/wp-nox-login-required/issues) on GitHub.
+* [Report an issue](https://github.com/nox-wp/wp-nox-login-required/issues) on GitHub.
 * Send us a Pull Request with your bug fixes and/or new features.
 * [Translate Required Login into different languages](https://translate.wordpress.org/projects/wp-plugins/wp-nox-login-required/).
 * Provide feedback and [suggestions on enhancements](https://github.com/nox-wp/wp-nox-login-required/issues?direction=desc&labels=Enhancement&page=1&sort=created&state=open).
 
-## Running Tests
+## Running PHPCS and Codeception Tests
 
-If you want to colaborate, before creating an pull request please make sure your code is passing our phpcs checks.
-Install the project composer dependencies, then run on the root folder:
+We provide an initialization script (`./init 5.6`, you need to pass the version you want to install) to configure a WordPress installation inside the folder `/tests/_data/wp`. 
+The script will use the `/tests/_config/testing.php` file to load the available variables and create the required environment files.
 
-```vendor/bin/phpcs```
+The configuration file should not be altered in your local environment. To override the basic configuration, you can create a configuration file named `/tests/_config/testing-local.php`.
 
-this should run basic conde sniffer
+After the initialization process, you can use both PHPCS and Codeception to test your project's additions.
+
+Note: in the configuration files, you may use the {DB} param to indicate the schema name. This param will be replaced by the correct schema name based on the WordPress version indicated in the initialization script.
+
+### Initialization script call examples
+
+The plugin requires at least WordPress 4.9.0 and PHP 5.6. All the tests run in major WordPress and PHP releases. To reproduce in your local environment the base NOX WordPress installations, you can run the following commands:
+
+```bash
+
+./init 4.9
+./init 5.0
+./init 5.1
+./init 5.2
+./init 5.3
+./init 5.4
+./init 5.5
+./init 5.6
+
+```
+
+Important note: the variable `WP_ROOT_FOLDER` should have your Virtual Host real path (like `/var/www/html`). The initialization script will try to remove it and create a symbolic link to the internal WordPress configured. 
+Example: if you run `./init 5.6` the internal path will be `/tests/_data/wp/nox_wp_56` and the html folder will link to it. For this behavior to work, you must have write access to the mentioned folders.
+
+Note about the database: the initialization script will try to connect to your local database and create the necessary schemas. The name pattern is `nox_wp<VERSION>` (for WordPress 5.6, the name will be nox_wp56). 
+Important: the script will create and populate the schema, but it will not delete it.
+
+### PHPCS
+
+If you want to collaborate, please make sure your code passes our phpcs checks before creating a pull request. 
+Install the project composer dependencies, then run the following command on the root folder:
+
+```bash
+./phpcs
+```
+
+or
+
+```bash
+./vendor/bin/phpcs
+```
+
+This should run the basic code sniffer to check your additions and WordPress code style.
+
+### Codeception Tests

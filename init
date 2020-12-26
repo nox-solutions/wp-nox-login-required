@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+
+ROOT=$(pwd)
+
+if [[ $# -eq 0 ]]; then
+  echo 'Please inform the WordPress version.'
+
+  exit 1
+fi
+
+echo "Verifying WordPress CLI Version:"
+
+wp cli version ||
+  (
+    curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar &&
+      /usr/bin/php wp-cli.phar --info &&
+      chmod +x wp-cli.phar &&
+      sudo mv wp-cli.phar /usr/local/bin/wp
+  )
+
+WP_VERSION=$1
+WP_BASE_NAME="nox_wp_${WP_VERSION//./}"
+WP_DB_NAME="nox_wp${WP_VERSION//./}"
+WP_PATH="${ROOT}/tests/_data/wp/${WP_BASE_NAME}"
+
+/usr/bin/php "${ROOT}/config" "${WP_DB_NAME}" "${WP_VERSION}"
+/usr/bin/php "${ROOT}/package"
+
+source "${ROOT}/.env.profile" || exit 1
+
+echo "Installing WordPress version ${WP_VERSION} (DB NAME: ${WP_DB_NAME} / PATH: ${WP_PATH})"
+
+/usr/bin/mysql -h "${TEST_DB_HOST}" -u "${TEST_DB_USER}" -p"${TEST_DB_PASSWORD}" -e "DROP DATABASE IF EXISTS ${WP_DB_NAME};CREATE DATABASE IF NOT EXISTS ${WP_DB_NAME} CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;" || { echo "Could not connect to DB." ; exit 1; }
+
+[ -d "${WP_PATH}" ] && rm -rf "${WP_PATH}"
+
+mkdir -p "${WP_PATH}" && cd "${WP_PATH}" && pwd
+
+wp core download --version="${WP_VERSION}"
+
+wp config create --dbhost="${TEST_DB_HOST}" --dbname="${WP_DB_NAME}" --dbuser="${TEST_DB_USER}" --dbpass="${TEST_DB_PASSWORD}"
+
+wp core install --url="${TEST_SITE_WP_DOMAIN}" --title="${TEST_SITE_TITLE}" --admin_user="${TEST_SITE_ADMIN_USERNAME}" --admin_password="${TEST_SITE_ADMIN_PASSWORD}" --admin_email="${TEST_SITE_ADMIN_EMAIL}" --skip-email --quiet
+
+wp plugin install "${ROOT}/tests/_data/plugin/wp-nox-login-required.zip"
+
+wp user create "${TEST_SITE_EDITOR_USERNAME}" "${TEST_SITE_EDITOR_EMAIL}" --role=editor --user_pass="${TEST_SITE_EDITOR_PASSWORD}"
+wp user create "${TEST_SITE_AUTHOR_USERNAME}" "${TEST_SITE_AUTHOR_EMAIL}" --role=author --user_pass="${TEST_SITE_AUTHOR_PASSWORD}"
+wp user create "${TEST_SITE_CONTRIBUTOR_USERNAME}" "${TEST_SITE_CONTRIBUTOR_EMAIL}" --role=contributor --user_pass="${TEST_SITE_CONTRIBUTOR_PASSWORD}"
+
+DUMP_FILE="${ROOT}/tests/_data/db/dump.sql"
+
+cd "${ROOT}" && pwd
+
+[ -f "${DUMP_FILE}" ] && rm -rf "${DUMP_FILE}"
+
+/usr/bin/mysqldump -h "${TEST_DB_HOST}" -u "${TEST_DB_USER}" -p"${TEST_DB_PASSWORD}" --routines --triggers "${WP_DB_NAME}" >"${DUMP_FILE}" || { echo "Could not connect to DB." ; exit 1; }
+
+if [ "${WP_ROOT_FOLDER}" != "${WP_PATH}" ]; then
+
+  [ -d "${WP_ROOT_FOLDER}" ] && (rm -rf "${WP_ROOT_FOLDER}" || sudo rm -rf "${WP_ROOT_FOLDER}")
+  [ -L "${WP_ROOT_FOLDER}" ] && (unlink "${WP_ROOT_FOLDER}" || sudo unlink "${WP_ROOT_FOLDER}")
+
+  ln -s "${WP_PATH}" "${WP_ROOT_FOLDER}" || sudo ln -s "${WP_PATH}" "${WP_ROOT_FOLDER}"
+
+fi
+
+ls -la "${WP_ROOT_FOLDER}"
+ls -la "${WP_PATH}"

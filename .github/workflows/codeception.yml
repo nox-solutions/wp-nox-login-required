@@ -1,0 +1,111 @@
+name: Codeception Tests
+
+on: [ push, pull_request ]
+
+env:
+  TZ: UTC
+  DEFAULT_COMPOSER_FLAGS: "--prefer-dist --no-interaction --no-progress --optimize-autoloader --ansi"
+
+jobs:
+  test:
+
+    runs-on: ${{ matrix.operating-system }}
+
+    strategy:
+      matrix:
+        operating-system: [ ubuntu-latest ]
+        php-versions: [ '5.6', '7.0', '7.1', '7.2', '7.3' ]
+        wp-versions: [ '5.6' ]
+
+    name: WP ${{ matrix.wp-versions }} | PHP ${{ matrix.php-versions }} | ${{ matrix.operating-system }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Prepare Selenium and Google Chrome
+        run: |
+          set -ex
+          sudo mkdir -p /opt/tests
+          sudo wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb -O /opt/tests/google-chrome.deb
+          sudo apt install -y /opt/tests/google-chrome.deb
+          sudo wget https://selenium-release.storage.googleapis.com/3.141/selenium-server-standalone-3.141.59.jar -O /opt/tests/selenium.jar
+          sudo chmod +x /opt/tests/selenium.jar
+          sudo wget https://chromedriver.storage.googleapis.com/87.0.4280.88/chromedriver_linux64.zip -O /opt/tests/chromedriver.zip
+          sudo unzip /opt/tests/chromedriver.zip -d /opt/tests
+          sudo chmod +x /opt/tests/chromedriver
+          java -Dwebdriver.chrome.driver=/opt/tests/chromedriver -jar /opt/tests/selenium.jar &
+
+      - name: Shutdown Ubuntu MySQL
+        run: sudo service mysql stop
+
+      - name: Install MariaDB
+        uses: getong/mariadb-action@v1.1
+        with:
+          character set server: 'utf8'
+          collation server: 'utf8_general_ci'
+          mariadb version: 'latest'
+          mysql root password: 'root'
+          mysql user: 'root'
+          mysql password: 'root'
+
+      - name: MariaDB Version
+        run: mysql --version
+
+      - name: Install and Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: mysql, pdo, pdo_mysql, gd, imagick, mbstring, intl, zip, json, xdebug
+          ini-values: post_max_size=256M
+          tools: pecl
+          coverage: true
+
+      - name: Install Apache
+        run: |
+          sudo apt-get install -y libapache2-mod-php${{ matrix.php-versions }}
+          sudo a2enmod rewrite
+          sudo service apache2 restart
+
+      - name: PHP Version and Extensions
+        run: |
+          php -v
+          php -m
+
+      - name: Validate Composer
+        run: composer validate
+
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Cache Composer Dependencies
+        uses: actions/cache@v1
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Install dependencies
+        run: composer update $DEFAULT_COMPOSER_FLAGS
+
+      - name: Build WordPress ${{ matrix.wp-versions }}
+        run: ./init ${{ matrix.wp-versions }}
+
+      - name: Verify Environment
+        run: cat ./.env.testing
+
+      - name: Localhost is working?
+        run: |
+          wget localhost -O ./wp.html
+          cat ./wp.html
+          rm -rf ./wp.html
+
+      - name: Run Codeception
+        run: php ./vendor/bin/codecept run acceptance
+
+      - name: Archive Tests Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: codeception-data
+          path: tests/_output
