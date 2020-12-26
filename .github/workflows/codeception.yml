@@ -19,15 +19,23 @@ jobs:
 
     name: WP ${{ matrix.wp-versions }} | PHP ${{ matrix.php-versions }} | ${{ matrix.operating-system }}
 
-    services:
-      selenium:
-        image: selenium/standalone-chrome:87.0.4280.88-chromedriver-87.0.4280.88
-        ports:
-          - '4444:4444'
-
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
+      - name: Prepare Selenium and Google Chrome
+        run: |
+          set -ex
+          sudo wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb -O /opt/tests/google-chrome.deb
+          sudo apt install -y /opt/tests/google-chrome.deb
+          sudo mkdir -p /opt/tests
+          sudo wget https://selenium-release.storage.googleapis.com/3.141/selenium-server-standalone-3.141.59.jar -O /opt/tests/selenium.jar
+          sudo chmod +x /opt/tests/selenium.jar
+          sudo wget https://chromedriver.storage.googleapis.com/87.0.4280.88/chromedriver_linux64.zip -O /opt/tests/chromedriver.zip
+          sudo unzip /opt/tests/chromedriver.zip -d /opt/tests
+          sudo chmod +x /opt/tests/chromedriver
+          sudo ln -s /opt/tests/chromedriver /usr/bin/chromedriver
+          java -Dwebdriver.chrome.driver=/opt/tests/chromedriver -jar /opt/tests/selenium.jar &
 
       - name: Shutdown Ubuntu MySQL
         run: sudo service mysql stop
