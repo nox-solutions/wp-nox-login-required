@@ -34,7 +34,6 @@ jobs:
           sudo wget https://chromedriver.storage.googleapis.com/87.0.4280.88/chromedriver_linux64.zip -O /opt/tests/chromedriver.zip
           sudo unzip /opt/tests/chromedriver.zip -d /opt/tests
           sudo chmod +x /opt/tests/chromedriver
-          sudo ln -s /opt/tests/chromedriver /usr/bin/chromedriver
           java -Dwebdriver.chrome.driver=/opt/tests/chromedriver -jar /opt/tests/selenium.jar &
 
       - name: Shutdown Ubuntu MySQL
