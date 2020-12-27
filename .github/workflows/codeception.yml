@@ -35,7 +35,7 @@ jobs:
       fail-fast: false
       matrix:
         operating-system: [ ubuntu-latest ]
-        php-versions: [ '5.6', '7.0', '7.1', '7.2', '7.3' ]
+        php-versions: [ '5.6', '7.0', '7.1', '7.2', '7.3', '7.4', '8.0' ]
         wp-versions: ${{ fromJson(needs.build.outputs.wp) }}
 
     name: WP ${{ matrix.wp-versions }} | PHP ${{ matrix.php-versions }} | ${{ matrix.operating-system }}
