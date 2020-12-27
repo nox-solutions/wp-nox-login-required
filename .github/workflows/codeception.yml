@@ -1,14 +1,31 @@
 name: Codeception
 
-on: [ pull_request ]
+on: [ push, pull_request ]
 
 env:
   TZ: UTC
   DEFAULT_COMPOSER_FLAGS: "--prefer-dist --no-interaction --no-progress --optimize-autoloader --ansi"
-  WP_VERSIONS: "${{ github.event_name == 'push' && [ '5.6' ] || [ '4.9', '5.0', '5.1', '5.2', '5.3', '5.4', '5.5', '5.6' ] }}"
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    outputs:
+      matrix: ${{ steps.wp.outputs.wp }}
+
+    steps:
+      - name: WordPress with Push
+        if: ${{ github.event_name == 'push' }}
+        id: wp
+        run: echo "::set-output name=wp::[ \"5.6\" ]"
+
+      - name: WordPress with Pull Request
+        if: ${{ github.event_name == 'pull_request' }}
+        id: wp
+        run: echo "::set-output name=wp::[ \"4.9\", \"5.0\", \"5.1\", \"5.2\", \"5.3\", \"5.4\", \"5.5\", \"5.6\" ]"
+
   test:
+    needs: build
 
     runs-on: ${{ matrix.operating-system }}
 
@@ -17,7 +34,7 @@ jobs:
       matrix:
         operating-system: [ ubuntu-latest ]
         php-versions: [ '5.6', '7.0', '7.1', '7.2', '7.3' ]
-        wp-versions: ${{ env.WP_VERSIONS }}
+        wp-versions: ${{ fromJson(needs.build.outputs.wp) }}
 
     name: WP ${{ matrix.wp-versions }} | PHP ${{ matrix.php-versions }} | ${{ matrix.operating-system }}
 
