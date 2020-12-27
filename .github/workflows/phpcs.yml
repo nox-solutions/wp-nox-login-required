@@ -14,7 +14,7 @@ jobs:
         run: composer validate
 
       - name: Event
-        run: echo $GITHUB_EVENT_NAME
+        run: echo ${{ matrix.env }}
 
       - name: Cache Composer packages
         id: composer-cache
