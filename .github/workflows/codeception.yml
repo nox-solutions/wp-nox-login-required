@@ -39,7 +39,11 @@ jobs:
         wp-versions: ${{ fromJson(needs.build.outputs.wp) }}
         exclude:
           - php-versions: '8.0'
-            wp-versions: [ '4.9', '5.0', '5.1', '5.2' ]
+            wp-versions:
+              - '4.9',
+              - '5.0',
+              - '5.1',
+              - '5.2'
 
     name: WP ${{ matrix.wp-versions }} | PHP ${{ matrix.php-versions }} | ${{ matrix.operating-system }}
 
