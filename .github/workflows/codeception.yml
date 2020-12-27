@@ -133,9 +133,3 @@ jobs:
 
       - name: Run Codeception
         run: php ./vendor/bin/codecept run acceptance
-
-      - name: Archive Tests Artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: codeception-data
-          path: tests/_output

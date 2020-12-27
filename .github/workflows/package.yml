@@ -1,0 +1,22 @@
+name: Package
+
+on: [ push ]
+
+jobs:
+  package:
+
+    runs-on: ubuntu-latest
+
+    name: WordPress Plugin Package
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Generate the Plugin Package
+        run: ./package
+
+      - name: Archive Package Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: plugin-package
+          path: tests/_data/plugin/wp-nox-login-required.zip
