@@ -18,5 +18,7 @@ jobs:
       - name: Archive Package Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: wp-nox-login-required
+          name: package
           path: tests/_data/plugin/wp-nox-login-required.zip
+          if-no-files-found: error
+          retention-days: 5
