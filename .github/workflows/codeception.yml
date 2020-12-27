@@ -40,6 +40,12 @@ jobs:
         exclude:
           - php-versions: '8.0'
             wp-versions: '4.9'
+          - php-versions: '8.0'
+            wp-versions: '5.0'
+          - php-versions: '8.0'
+            wp-versions: '5.1'
+          - php-versions: '8.0'
+            wp-versions: '5.2'
 
     name: WP ${{ matrix.wp-versions }} | PHP ${{ matrix.php-versions }} | ${{ matrix.operating-system }}
 
