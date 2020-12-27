@@ -11,18 +11,18 @@ jobs:
     runs-on: ubuntu-latest
 
     outputs:
-      matrix: ${{ steps.wp.outputs.wp }}
+      wp: ${{ steps.wp.outputs.wp_push || steps.wp.outputs.wp_pr }}
 
     steps:
       - name: WordPress with Push
         if: ${{ github.event_name == 'push' }}
-        id: wp
-        run: echo "::set-output name=wp::[ \"5.6\" ]"
+        id: wpp
+        run: echo "::set-output name=wp_push::[ \"5.6\" ]"
 
       - name: WordPress with Pull Request
         if: ${{ github.event_name == 'pull_request' }}
-        id: wp
-        run: echo "::set-output name=wp::[ \"4.9\", \"5.0\", \"5.1\", \"5.2\", \"5.3\", \"5.4\", \"5.5\", \"5.6\" ]"
+        id: wppr
+        run: echo "::set-output name=wp_pr::[ \"4.9\", \"5.0\", \"5.1\", \"5.2\", \"5.3\", \"5.4\", \"5.5\", \"5.6\" ]"
 
   test:
     needs: build
